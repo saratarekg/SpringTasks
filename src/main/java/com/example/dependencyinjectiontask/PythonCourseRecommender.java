@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import org.example.CourseRecommender;
+import org.example.Course;
 
 public class PythonCourseRecommender implements CourseRecommender {
     @Override

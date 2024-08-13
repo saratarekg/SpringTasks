@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import org.example.CourseRecommender;
+import org.example.Course;
+
 
 @Service
 public class CourseService {
@@ -15,7 +18,7 @@ public class CourseService {
     }
 
     @Autowired
-    public void setCourseRecommender(@Qualifier("JavaRecommender") CourseRecommender courseRecommender) {
+    public void setCourseRecommender(@Qualifier("PythonRecommender") CourseRecommender courseRecommender) {
         this.courseRecommender = courseRecommender;
     }
 
