@@ -15,7 +15,7 @@ public class CourseService {
     }
 
     @Autowired
-    public void setCourseRecommender(CourseRecommender courseRecommender) {
+    public void setCourseRecommender(@Qualifier("JavaRecommender") CourseRecommender courseRecommender) {
         this.courseRecommender = courseRecommender;
     }
 

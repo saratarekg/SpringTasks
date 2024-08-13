@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
-@Primary
-@Component("JavaCourseRecommender")
+
 public class JavaCourseRecommender implements CourseRecommender {
     @Override
         public List<Course> recommendedCourses() {
