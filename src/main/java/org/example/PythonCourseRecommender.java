@@ -4,7 +4,7 @@ package org.example;
 import java.util.Arrays;
 import java.util.List;
 
-public class PythonCourseRecommenderNew implements CourseRecommender {
+public class PythonCourseRecommender implements CourseRecommender {
     @Override
     public List<Course> recommendedCourses() {
         return Arrays.asList(
