@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.example.CourseRecommender;
-import org.example.PythonCourseRecommenderNew;
+import org.example.PythonCourseRecommender;
 
 @Configuration
 @ComponentScan("com.example.dependencyinjectiontask")
@@ -19,7 +19,7 @@ public class ApplicationConfig {
 
     @Bean(name="PythonRecommender")
     public CourseRecommender pythonRecommender() {
-        return new PythonCourseRecommenderNew();
+        return new PythonCourseRecommender();
     }
 
     @Bean
