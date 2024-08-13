@@ -8,15 +8,18 @@ import java.util.List;
 
 @Service
 public class CourseService {
-    private final CourseRecommender courseRecommender;
+    private CourseRecommender courseRecommender;
 
-    public CourseService(@Qualifier("PythonCourseRecommender") CourseRecommender courseRecommender) {
+    public CourseService() {
+
+    }
+
+    @Autowired
+    public void setCourseRecommender(CourseRecommender courseRecommender) {
         this.courseRecommender = courseRecommender;
     }
 
-//    public CourseService(@Qualifier("JavaCourseRecommender") CourseRecommender courseRecommender) {
-//        this.courseRecommender = courseRecommender;
-//    }
+
 
     public void showRecommendedCourses() {
         List<Course> courses = courseRecommender.recommendedCourses();
