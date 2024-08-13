@@ -22,6 +22,11 @@ public class ApplicationConfig {
         return new PythonCourseRecommenderNew();
     }
 
+    @Bean
+    public CourseService courseService() {
+        return new CourseService();
+    }
+
 
 }
 
