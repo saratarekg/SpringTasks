@@ -9,7 +9,7 @@ import org.example.CourseRecommender;
 import org.example.Course;
 
 
-@Service
+
 public class CourseService {
     private CourseRecommender courseRecommender;
 
