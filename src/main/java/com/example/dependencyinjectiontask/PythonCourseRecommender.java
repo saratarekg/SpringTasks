@@ -13,8 +13,8 @@ public class PythonCourseRecommender implements CourseRecommender {
     @Override
     public List<Course> recommendedCourses() {
         return Arrays.asList(
-                new Course("Python 101", "Introduction to Python programming"),
-                new Course("Advanced Python", "Deep dive into Java Python")
+                new Course("Python 101", "Introduction to Python programming",2,1),
+                new Course("Advanced Python", "Deep dive into Java Python",2,1)
         );
     }
 }
