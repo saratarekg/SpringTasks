@@ -1,24 +1,34 @@
 package com.example.dependencyinjectiontask;
 
-
-import org.springframework.context.annotation.Primary;
+import org.example.Course;
+import org.example.CourseRecommender;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.example.CourseRecommender;
-import org.example.Course;
 
-import java.util.Arrays;
 import java.util.List;
-import org.example.CourseRecommender;
-import org.example.Course;
+import java.util.stream.Collectors;
 
+@Component
 public class JavaCourseRecommender implements CourseRecommender {
-    @Override
-        public List<Course> recommendedCourses() {
-            return Arrays.asList(
-                    new Course("Java 101", "Introduction to Java programming",4,2),
-                    new Course("Advanced Java", "Deep dive into Java features",4,2),
-                    new Course("Spring Framework", "Building applications with Spring",4,2)
-            );
-        }
 
+    private final JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    public JavaCourseRecommender(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
+
+
+    @Override
+    public List<Course> recommendedCourses() {
+        String sql = "SELECT * FROM Course";
+
+        // Retrieve all courses
+        List<Course> courses = jdbcTemplate.query(sql, new JdbcCourseRepository.CourseRowMapper());
+
+        return courses.stream()
+                .limit(5)
+                .collect(Collectors.toList());
+    }
 }

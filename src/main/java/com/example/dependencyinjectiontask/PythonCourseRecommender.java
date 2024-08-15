@@ -1,9 +1,6 @@
 package com.example.dependencyinjectiontask;
 
 
-import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Component;
-
 import java.util.Arrays;
 import java.util.List;
 import org.example.CourseRecommender;
