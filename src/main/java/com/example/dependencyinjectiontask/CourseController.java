@@ -1,7 +1,11 @@
 package com.example.dependencyinjectiontask;
 
 import org.example.Course;
+import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,9 +24,12 @@ public class CourseController {
         this.courseService = courseService;
     }
 
+    @Autowired
+    private CourseMapper courseMapper;
+
     @GetMapping("/{id}")
-    public ResponseEntity<Course> getCourse(@PathVariable int id) {
-        Course course = courseService.viewCourse(id);
+    public ResponseEntity<CourseDTO> getCourse(@PathVariable int id) {
+        CourseDTO course = courseService.viewCourse(id);
         return ResponseEntity.ok(course);
     }
 
@@ -41,11 +48,13 @@ public class CourseController {
             @RequestParam(value = "authorId", required = false) Optional<Integer> authorId) {
 
         try {
-            Course course = courseService.viewCourse(id);
+            CourseDTO courseDTO = courseService.viewCourse(id);
+            Course course = courseMapper.toCourse(courseDTO);
+
             course.setTitle(name.orElse(course.getTitle()));
             course.setDescription(description.orElse(course.getDescription()));
             course.setCredit(credit.orElse(course.getCredit()));
-            course.setAuthorId(authorId.orElse(course.getAuthorId()));
+//            course.setAuthorId(authorId.orElse(course.getAuthorId()));
             courseService.updateCourse(course);
 
 //            courseService.updateCourse(id, name, description, credit, authorId);
@@ -58,7 +67,9 @@ public class CourseController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Course> deleteCourse(@PathVariable int id) {
-        Course course = courseService.viewCourse(id); // Retrieve the course before deleting
+        // Retrieve the course before deleting
+        CourseDTO courseDTO = courseService.viewCourse(id);
+        Course course = courseMapper.toCourse(courseDTO);
         if (course == null) {
             return ResponseEntity.notFound().build(); // Return 404 if course not found
         }
@@ -72,4 +83,14 @@ public class CourseController {
         return ResponseEntity.ok(courses);
 
     }
+
+    @GetMapping("/paginated")
+    public ResponseEntity<Page<CourseDTO>> discoverAllCourses(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<CourseDTO> courses = courseService.viewAllCoursesPaginated(pageable);
+        return ResponseEntity.ok(courses);
+    }
+
 }

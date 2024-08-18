@@ -12,23 +12,12 @@ import java.util.stream.Collectors;
 @Component
 public class JavaCourseRecommender implements CourseRecommender {
 
-    private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public JavaCourseRecommender(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
-
 
     @Override
     public List<Course> recommendedCourses() {
-        String sql = "SELECT * FROM Course";
 
-        // Retrieve all courses
-        List<Course> courses = jdbcTemplate.query(sql, new JdbcCourseRepository.CourseRowMapper());
+//        return courseRepository.findAll().stream().limit(5).collect(Collectors.toList());
 
-        return courses.stream()
-                .limit(5)
-                .collect(Collectors.toList());
+        return List.of();
     }
 }
