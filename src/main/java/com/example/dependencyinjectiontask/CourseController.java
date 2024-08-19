@@ -54,10 +54,8 @@ public class CourseController {
             course.setTitle(name.orElse(course.getTitle()));
             course.setDescription(description.orElse(course.getDescription()));
             course.setCredit(credit.orElse(course.getCredit()));
-//            course.setAuthorId(authorId.orElse(course.getAuthorId()));
             courseService.updateCourse(course);
 
-//            courseService.updateCourse(id, name, description, credit, authorId);
             return new ResponseEntity<>("Course updated successfully", HttpStatus.OK);
         }  catch (Exception e) {
             // Log the exception and return an appropriate response
