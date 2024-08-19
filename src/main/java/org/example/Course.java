@@ -20,6 +20,12 @@ public class Course {
     @ManyToMany(mappedBy = "courses")
     private Set<Author> authors;
 
+    @OneToMany(mappedBy = "course")
+    private Set<Rating> ratings;
+
+    @OneToOne(mappedBy = "course")
+    private Assessment assessment;
+
     public Course(String title, String description, int credit) {
         this.title = title;
         this.description = description;
