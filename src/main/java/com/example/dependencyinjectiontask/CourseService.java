@@ -36,23 +36,16 @@ public class CourseService {
     }
 
 
-    public List<Course> showRecommendedCourses() {
+    public List<CourseDTO> showRecommendedCourses() {
         List<Course> courses = courseRecommender.recommendedCourses();
         courses.forEach(course -> System.out.println(course));
-        return courseRepository.findAll().stream().limit(5).collect(Collectors.toList());
+        try{
+        return courseRepository.findAll().stream().limit(5).map(courseMapper::toCourseDTO).collect(Collectors.toList());
     }
-
-
-    public void addCourse(Course course) {
-        courseRepository.save(course);
+    catch(Exception e){
+        throw new CustomException("Failed to fetch recommended courses", e);
     }
-
-    public void updateCourse(Course course) {
-        if (courseRepository.existsById(course.getId())) {
-            courseRepository.save(course);
-        }
     }
-
 
     public CourseDTO viewCourse(int id) {
         Optional<Course> optionalCourse = courseRepository.findById(id);
@@ -65,16 +58,42 @@ public class CourseService {
         }
     }
 
-
-
-    public Page<CourseDTO> viewAllCoursesPaginated(Pageable pageable) {
-        return courseRepository.findAll(pageable)
-                .map(courseMapper::toCourseDTO);
+    public CourseDTO addCourse(Course course) {
+        if (course == null) {
+            throw new IllegalArgumentException("Course cannot be null");
+        }
+        Course addedCourse = courseRepository.save(course);
+        return courseMapper.toCourseDTO(addedCourse);
     }
+
+
+
+    public CourseDTO updateCourse(Course course) {
+        if (!courseRepository.existsById(course.getId())) {
+            throw new CustomException("Course not found with ID: " + course.getId());
+        }
+        Course updatedCourse = courseRepository.save(course);
+        return courseMapper.toCourseDTO(updatedCourse);
+    }
+
 
     public void deleteCourse(int id) {
-        courseRepository.deleteById(id);
+        if (courseRepository.existsById(id)) {
+            courseRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("Course with id " + id + " does not exist.");
+        }
     }
+
+
+    public Page<Course> viewAllCoursesPaginated(Pageable pageable) {
+            return courseRepository.findAll(pageable);
+//                    .map(courseMapper::toCourseDTO);
+
+    } //to be tested yet
+
+
+
 
 }
 

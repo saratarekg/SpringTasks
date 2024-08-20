@@ -2,6 +2,7 @@ package com.example.dependencyinjectiontask;
 
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +21,18 @@ public class AuthorController {
     }
 
     @GetMapping("email")
-    public ResponseEntity<Author> getAuthorByEmail(@RequestParam String email) {
-        Author author = authorService.getAuthorByEmail(email);
-        return ResponseEntity.ok(author);
+    public ResponseEntity<Object> getAuthorByEmail(@RequestParam String email) {
+        try {
+            Author author = authorService.getAuthorByEmail(email);
+            return ResponseEntity.ok(author);
+        }
+        catch (CustomException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
 }
