@@ -4,7 +4,6 @@ import jakarta.persistence.EntityNotFoundException;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -87,11 +86,11 @@ public class CourseService {
     }
 
 
-    public Page<CourseDTO> viewAllCoursesPaginated(Pageable pageable) {
-            return courseRepository.findAll(pageable)
-                    .map(courseMapper::toCourseDTO);
+    public Page<Course> viewAllCoursesPaginated(Pageable pageable) {
+            return courseRepository.findAll(pageable);
+//                    .map(courseMapper::toCourseDTO);
 
-    }
+    } //to be tested yet
 
 
 

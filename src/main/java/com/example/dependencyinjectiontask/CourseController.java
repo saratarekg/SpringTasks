@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +27,6 @@ public class CourseController {
         this.courseService = courseService;
     }
 
-    @Autowired
     private CourseMapper courseMapper;
 
     @GetMapping("/{id}")
@@ -119,7 +119,7 @@ public class CourseController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
         try {
-            Page<CourseDTO> courses = courseService.viewAllCoursesPaginated(pageable);
+            Page<Course> courses = courseService.viewAllCoursesPaginated(pageable);
             return ResponseEntity.ok(courses);
         }
         catch (Exception e) {
