@@ -11,7 +11,12 @@ public class AuthorService {
     private AuthorRepository authorRepository;
 
     public Author getAuthorByEmail(String email) {
-        return authorRepository.findByEmail(email);
+        Author author = authorRepository.findByEmail(email);
+        if (author == null) {
+            throw new CustomException("Author with email " + email + " not found.");
+        }
+        return author;
     }
+
 }
 

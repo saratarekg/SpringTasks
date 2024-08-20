@@ -1,5 +1,6 @@
 package com.example.dependencyinjectiontask;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,67 +30,101 @@ public class CourseController {
     private CourseMapper courseMapper;
 
     @GetMapping("/{id}")
-    public ResponseEntity<CourseDTO> getCourse(@PathVariable int id) {
-        CourseDTO course = courseService.viewCourse(id);
-        return ResponseEntity.ok(course);
+    public ResponseEntity<Object> getCourse(@PathVariable int id) {
+        try {
+            CourseDTO course = courseService.viewCourse(id);
+            return ResponseEntity.ok(course);
+        }
+        catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        catch (Exception ex) {
+            return new ResponseEntity<>("Failed to get course due to an unexpected error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
-    public ResponseEntity<Void> addCourse(@RequestBody Course course) {
-        courseService.addCourse(course);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Object> addCourse(
+    @RequestParam(value = "name", required = true) String name,
+    @RequestParam(value = "description", required = false) Optional<String> description,
+    @RequestParam(value = "credit", required = true) Integer credit) {
+        try {
+            Course course = new Course();
+            course.setTitle(name);
+            course.setDescription(description.orElse(null));
+            course.setCredit(credit);
+            courseService.addCourse(course);
+            return ResponseEntity.ok(course);
+
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        } catch (Exception ex) {
+            return new ResponseEntity<>("Failed to add course due to an unexpected error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateCourse(
+    public ResponseEntity<Object> updateCourse(
             @PathVariable("id") int id,
             @RequestParam(value = "name", required = false) Optional<String> name,
             @RequestParam(value = "description", required = false) Optional<String> description,
-            @RequestParam(value = "credit", required = false) Optional<Integer> credit,
-            @RequestParam(value = "authorId", required = false) Optional<Integer> authorId) {
+            @RequestParam(value = "credit", required = false) Optional<Integer> credit)
+    {
 
         try {
             CourseDTO courseDTO = courseService.viewCourse(id);
             Course course = courseMapper.toCourse(courseDTO);
-
+            course.setId(id);
             course.setTitle(name.orElse(course.getTitle()));
             course.setDescription(description.orElse(course.getDescription()));
             course.setCredit(credit.orElse(course.getCredit()));
             courseService.updateCourse(course);
 
-            return new ResponseEntity<>("Course updated successfully", HttpStatus.OK);
-        }  catch (Exception e) {
-            // Log the exception and return an appropriate response
-            return new ResponseEntity<>("Course not found or update failed", HttpStatus.NOT_FOUND);
+            return ResponseEntity.ok(course);
+        }
+        catch(CustomException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>("Failed to update course due to an unexpected error", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Course> deleteCourse(@PathVariable int id) {
-        // Retrieve the course before deleting
-        CourseDTO courseDTO = courseService.viewCourse(id);
-        Course course = courseMapper.toCourse(courseDTO);
-        if (course == null) {
-            return ResponseEntity.notFound().build(); // Return 404 if course not found
+    public ResponseEntity<String> deleteCourse(@PathVariable int id) {
+        try {
+            courseService.deleteCourse(id);
+            return new ResponseEntity<>("Course deleted successfully", HttpStatus.OK);
+        } catch (EntityNotFoundException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
-        courseService.deleteCourse(id);
-        return ResponseEntity.ok(course); // Return the deleted course with 200 OK status
     }
 
+
     @GetMapping("/recommended")
-    public ResponseEntity<List<Course>> discoverRecommendedCourses() {
-        List<Course> courses= courseService.showRecommendedCourses();
-        return ResponseEntity.ok(courses);
+    public ResponseEntity<Object> discoverRecommendedCourses() {
+        try {
+            List<CourseDTO> courses = courseService.showRecommendedCourses();
+            return ResponseEntity.ok(courses);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
 
     }
 
     @GetMapping("/paginated")
-    public ResponseEntity<Page<CourseDTO>> discoverAllCourses(
+    public ResponseEntity<Object> discoverAllCourses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<CourseDTO> courses = courseService.viewAllCoursesPaginated(pageable);
-        return ResponseEntity.ok(courses);
+        try {
+            Page<CourseDTO> courses = courseService.viewAllCoursesPaginated(pageable);
+            return ResponseEntity.ok(courses);
+        }
+        catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+        }
     }
 
 }
