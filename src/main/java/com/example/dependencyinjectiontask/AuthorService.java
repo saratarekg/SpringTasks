@@ -1,5 +1,6 @@
 package com.example.dependencyinjectiontask;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class AuthorService {
     public Author getAuthorByEmail(String email) {
         Author author = authorRepository.findByEmail(email);
         if (author == null) {
-            throw new CustomException("Author with email " + email + " not found.");
+            throw new EntityNotFoundException("Author with email " + email + " not found.");
         }
         return author;
     }
