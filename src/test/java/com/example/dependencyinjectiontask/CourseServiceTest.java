@@ -88,6 +88,7 @@ public class CourseServiceTest {
     void addCourse_courseNull_throwsIllegalArgumentException() {
         Course nullCourse = null;
         assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(nullCourse));
+
     }
 
     @Test
@@ -122,6 +123,9 @@ public class CourseServiceTest {
         assertEquals(updatedCourse.getDescription(), result.getDescription());
         assertEquals(updatedCourse.getCredit(), result.getCredit());
 
+        verify(courseRepository).save(course);
+
+
     }
 
     @Test
@@ -154,6 +158,9 @@ public class CourseServiceTest {
         });
 
         assertEquals("No courses found", exception.getMessage());
+
+        verify(courseRepository).findAll();
+
     }
 
     @Test
@@ -169,7 +176,6 @@ public class CourseServiceTest {
                 .map(course -> new CourseDTO(course.getTitle(), course.getDescription()))
                 .collect(Collectors.toList());
 
-        when(courseRepository.findAll()).thenReturn(courses);
         for (int i = 0; i < 5; i++) {
             when(courseMapper.toCourseDTO(courses.get(i))).thenReturn(courseDTOs.get(i));
         }
@@ -179,6 +185,10 @@ public class CourseServiceTest {
         assertNotNull(result);
         assertEquals(5, result.size());
         assertEquals(courseDTOs, result);
+
+        verify(courseRepository).findAll();
+
+
     }
 
 
@@ -201,6 +211,9 @@ public class CourseServiceTest {
         assertNotNull(result);
         assertEquals(courses.size(), result.getTotalElements());
         assertEquals(courses, result.getContent());
+
+        verify(courseRepository).findAll(pageable);
+
     }
 
 
@@ -217,5 +230,8 @@ public class CourseServiceTest {
         });
 
         assertEquals("No courses found", exception.getMessage());
+
+        verify(courseRepository).findAll(pageable);
+
     }
 }

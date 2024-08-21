@@ -44,7 +44,7 @@ public class CourseService {
             throw new EntityNotFoundException("No courses found");
         }
         else{
-        return courseRepository.findAll().stream().limit(5).map(courseMapper::toCourseDTO).collect(Collectors.toList());
+        return courses.stream().limit(5).map(courseMapper::toCourseDTO).collect(Collectors.toList());
     }
     }
 
