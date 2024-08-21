@@ -1,5 +1,6 @@
 package com.example.dependencyinjectiontask;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,11 +27,11 @@ public class AuthorController {
             Author author = authorService.getAuthorByEmail(email);
             return ResponseEntity.ok(author);
         }
-        catch (CustomException e) {
+        catch (EntityNotFoundException e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
         }
         catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Failed to fetch author.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
