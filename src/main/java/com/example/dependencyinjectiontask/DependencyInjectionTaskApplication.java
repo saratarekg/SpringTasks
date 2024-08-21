@@ -19,11 +19,7 @@ public class DependencyInjectionTaskApplication {
     public static void main(String[] args) throws SQLException {
 
 
-        ApplicationContext context = SpringApplication.run(DependencyInjectionTaskApplication.class, args);
-
-        // Retrieve the CourseService bean from the application context
-        CourseService courseService = context.getBean(CourseService.class);
-        courseService.showRecommendedCourses();
+        SpringApplication.run(DependencyInjectionTaskApplication.class, args);
 
 
     }
