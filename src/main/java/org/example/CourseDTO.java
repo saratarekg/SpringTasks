@@ -3,16 +3,14 @@ package org.example;
 public class CourseDTO {
     private String title;
     private String description;
-    private int credit;
 
     // Constructors
     public CourseDTO() {
     }
 
-    public CourseDTO(int id, String title, String description, int credit) {
+    public CourseDTO(String title, String description) {
         this.title = title;
         this.description = description;
-        this.credit = credit;
     }
 
 
@@ -32,13 +30,7 @@ public class CourseDTO {
         this.description = description;
     }
 
-    public int getCredit() {
-        return credit;
-    }
 
-    public void setCredit(int credit) {
-        this.credit = credit;
-    }
 
 
     @Override
@@ -46,7 +38,6 @@ public class CourseDTO {
         return "CourseDTO{" +
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", credit=" + credit +
                 '}';
     }
 }

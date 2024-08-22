@@ -29,6 +29,15 @@ public class Author {
     )
     private Set<Course> courses;
 
+    public Author(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
+
+    public Author() {
+        
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id;}
 

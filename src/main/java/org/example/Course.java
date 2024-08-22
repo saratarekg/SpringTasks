@@ -14,7 +14,7 @@ public class Course {
     @Column(name = "name")
     private String title;
     private String description;
-    private int credit;
+    private Integer credit;
 
 
     @ManyToMany(mappedBy = "courses")
@@ -26,7 +26,13 @@ public class Course {
     @OneToOne(mappedBy = "course")
     private Assessment assessment;
 
-    public Course(String title, String description, int credit) {
+    public Course(int id, String title, String description, Integer credit) {
+       this.id = id;
+        this.title = title;
+        this.description = description;
+        this.credit = credit;
+    }
+    public Course(String title, String description, Integer credit) {
         this.title = title;
         this.description = description;
         this.credit = credit;
@@ -55,7 +61,7 @@ public class Course {
         this.description = description;
     }
 
-    public int getCredit() { return credit; }
+    public Integer getCredit() { return credit; }
     public void setCredit(int credit) { this.credit = credit; }
 
 

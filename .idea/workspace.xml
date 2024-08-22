@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ef00674-dd4e-40f3-9c3f-b4576806a292" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Assessment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/example/Rating.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Author.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Author.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Course.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/CourseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/CourseDTO.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -89,7 +90,8 @@
       <workItem from="1723538922014" duration="9459000" />
       <workItem from="1723555348293" duration="3000" />
       <workItem from="1723620707684" duration="6274000" />
-      <workItem from="1723969378221" duration="10577000" />
+      <workItem from="1723969378221" duration="18689000" />
+      <workItem from="1724225107817" duration="6951000" />
     </task>
     <servers />
   </component>
