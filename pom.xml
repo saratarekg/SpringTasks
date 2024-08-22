@@ -27,8 +27,14 @@
         <url/>
     </scm>
     <properties>
-        <java.version>22</java.version>
+        <java.version>17</java.version>
+        <sonar.projectKey>Dependency-Injection-Task</sonar.projectKey>
+        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.login>squ_327dc8745b80f501fa005585cb543638fffdc502</sonar.login>
+
     </properties>
+
+
     <dependencies>
 
         <dependency>
@@ -104,7 +110,11 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M7</version>
             </plugin>
-
+                    <plugin>
+                        <groupId>org.sonarsource.scanner.maven</groupId>
+                        <artifactId>sonar-maven-plugin</artifactId>
+                        <version>3.9.1.2184</version>
+                    </plugin>
         </plugins>
     </build>
 
