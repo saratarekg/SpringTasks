@@ -2,6 +2,7 @@ package com.example.dependencyinjectiontask;
 
 import org.example.Course;
 import org.example.CourseRecommender;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -9,13 +10,22 @@ import java.util.List;
 
 @Component
 public class JavaCourseRecommender implements CourseRecommender {
+    private final CourseRepository courseRepository;
 
+    @Autowired
+    public JavaCourseRecommender(CourseRepository courseRepository) {
+        this.courseRepository = courseRepository;
+    }
 
     @Override
     public List<Course> recommendedCourses() {
 
-//        return courseRepository.findAll().stream().limit(5).collect(Collectors.toList());
+        List<Course> courses = courseRepository.findAll();
+        if (!courses.isEmpty()) {
+            return courses;
+        } else {
 
         return List.of();
+        }
     }
 }

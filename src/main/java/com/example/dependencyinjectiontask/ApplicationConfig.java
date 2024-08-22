@@ -14,8 +14,8 @@ public class ApplicationConfig {
 
 
     @Bean(name = "JavaRecommender")
-    public CourseRecommender javaRecommender() {
-        return new JavaCourseRecommender();
+    public CourseRecommender javaRecommender(CourseRepository courseRepository) {
+        return new JavaCourseRecommender(courseRepository);
     }
 
     @Bean(name="PythonRecommender")
