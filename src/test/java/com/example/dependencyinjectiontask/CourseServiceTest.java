@@ -5,11 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import jakarta.persistence.EntityNotFoundException;
 import org.example.Course;
 import org.example.CourseDTO;
+import org.example.CourseRecommender;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -35,6 +37,10 @@ public class CourseServiceTest {
 
     @MockBean
     private CourseMapper courseMapper;
+
+    @MockBean
+    JavaCourseRecommender courseRecommender;
+
 
     @InjectMocks
     @Autowired
@@ -151,7 +157,9 @@ public class CourseServiceTest {
 
     @Test
     void showRecommendedCourses_noCoursesFound_throwsEntityNotFoundException() {
+        when(courseRecommender.recommendedCourses()).thenReturn(Collections.emptyList());
         when(courseRepository.findAll()).thenReturn(Collections.emptyList());
+
 
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class, () -> {
             courseService.showRecommendedCourses();
@@ -171,10 +179,18 @@ public class CourseServiceTest {
 
         when(courseRepository.findAll()).thenReturn(courses);
 
-        List<CourseDTO> courseDTOs = courses.stream()
+        List<Course> first5Courses = courses.stream()
                 .limit(5)
+                .collect(Collectors.toList());
+
+
+        when(courseRecommender.recommendedCourses()).thenReturn(first5Courses);
+
+
+        List<CourseDTO> courseDTOs = first5Courses.stream()
                 .map(course -> new CourseDTO(course.getTitle(), course.getDescription()))
                 .collect(Collectors.toList());
+
 
         for (int i = 0; i < 5; i++) {
             when(courseMapper.toCourseDTO(courses.get(i))).thenReturn(courseDTOs.get(i));

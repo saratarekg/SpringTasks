@@ -37,9 +37,8 @@ public class CourseService {
 
 
     public List<CourseDTO> showRecommendedCourses() {
-//        List<Course> courses = courseRecommender.recommendedCourses();
-//        courses.forEach(course -> System.out.println(course));
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseRecommender.recommendedCourses();
+
         if(courses.isEmpty()) {
             throw new EntityNotFoundException("No courses found");
         }
