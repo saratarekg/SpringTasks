@@ -1,9 +1,11 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Services;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.Repositories.AuthorRepository;
+import javax.persistence.EntityNotFoundException;
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class AuthorService {

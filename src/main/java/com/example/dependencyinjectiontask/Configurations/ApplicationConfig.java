@@ -1,5 +1,7 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Configurations;
 
+import com.example.dependencyinjectiontask.Repositories.CourseRepository;
+import com.example.dependencyinjectiontask.Components.JavaCourseRecommender;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -22,10 +24,6 @@ public class ApplicationConfig {
     public CourseRecommender pythonRecommender() {
         return new PythonCourseRecommender();
     }
-
-
-
-
 
 
 

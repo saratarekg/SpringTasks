@@ -1,6 +1,8 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Controllers;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Services.CourseService;
+import javax.persistence.EntityNotFoundException;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.junit.jupiter.api.Test;
@@ -23,7 +25,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@WebMvcTest(controllers=CourseController.class)
+@WebMvcTest(controllers= CourseController.class)
 @ContextConfiguration(classes = CourseController.class)
 public class CourseControllerTest {
 
@@ -44,6 +46,7 @@ public class CourseControllerTest {
         when(courseService.viewCourse(courseId)).thenReturn(courseDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/courses/{id}", courseId)
+
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("{\"title\":\"testUpdate\",\"description\":\"test update\"}"));
@@ -74,12 +77,13 @@ public class CourseControllerTest {
     }
 
     @Test
+//    @WithMockUser(username = "admin", roles = {"ADMIN"})
     void addCourse_courseDetailsEntered_returnsCourse() throws Exception {
         CourseDTO courseDTO = new CourseDTO("Scalable", "build scalable apps");
 
         when(courseService.addCourse(any(Course.class))).thenReturn(courseDTO);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "Scalable")
                         .param("description", "build scalable apps")
                         .param("credit", "2")
@@ -93,7 +97,7 @@ public class CourseControllerTest {
     void addCourse_creditNegative_returnsBadRequest() throws Exception {
         when(courseService.addCourse(any(Course.class))).thenThrow(new IllegalArgumentException("Course credit must be a positive number and not empty"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "cs101")
                         .param("description", "a cs course")
                         .param("credit", "-2")
@@ -106,7 +110,7 @@ public class CourseControllerTest {
     void addCourse_emptyName_returnsBadRequest() throws Exception {
         when(courseService.addCourse(any(Course.class))).thenThrow(new IllegalArgumentException("Course title cannot be empty"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "")
                         .param("description", "a cs course")
                         .param("credit", "2")
@@ -119,7 +123,7 @@ public class CourseControllerTest {
     void addCourse_unexpectedError_returnsInternalServerError() throws Exception {
         when(courseService.addCourse(any(Course.class))).thenThrow(new RuntimeException("Unexpected error"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "csen101")
                         .param("description", "a cs course")
                         .param("credit", "2")
@@ -137,7 +141,7 @@ public class CourseControllerTest {
         when(courseService.viewCourseC(courseId)).thenReturn(Course);
         when(courseService.updateCourse(any(Course.class))).thenReturn(updatedCourse);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/{id}", courseId)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", courseId)
                         .param("name", "Java3")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -153,7 +157,7 @@ public class CourseControllerTest {
 
         when(courseService.viewCourseC(courseId)).thenThrow(new EntityNotFoundException("Course with id " + courseId + " not found"));
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/{id}", courseId)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", courseId)
                         .param("name", "csen101")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
@@ -165,13 +169,13 @@ public class CourseControllerTest {
     void updateCourse_internalServerError_returnsBadRequest() throws Exception {
         when(courseService.addCourse(any(Course.class))).thenThrow(new RuntimeException("Failed to update course due to an unexpected error"));
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", 1)
                         .param("name", "csen101")
                         .param("description", "a cs course")
                         .param("credit", "2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to add course due to an unexpected error"));
+                .andExpect(content().string("Failed to update course due to an unexpected error"));
     }
 
     @Test
@@ -181,7 +185,7 @@ public class CourseControllerTest {
         doThrow(new EntityNotFoundException("Course with id " + courseId + " not found"))
                 .when(courseService).deleteCourse(courseId); //because returns void
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/courses/{id}", courseId)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/courses/delete/{id}", courseId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Course with id " + courseId + " not found"));
@@ -193,7 +197,8 @@ public class CourseControllerTest {
 
         doNothing().when(courseService).deleteCourse(courseId);
 
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/courses/{id}", courseId)
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/courses/delete/{id}", courseId)
+                        .header("Authorization","Admin")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }

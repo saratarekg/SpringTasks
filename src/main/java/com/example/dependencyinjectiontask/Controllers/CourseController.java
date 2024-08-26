@@ -1,6 +1,7 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Controllers;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Services.CourseService;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +10,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
+
 
 @RestController
 @RequestMapping("/api/courses")
@@ -43,7 +47,7 @@ public class CourseController {
     }
 
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<Object> addCourse(
             @RequestParam(value = "name", required = true) String name,
             @RequestParam(value = "description", required = false) Optional<String> description,
@@ -64,7 +68,7 @@ public class CourseController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateCourse(
             @PathVariable("id") int id,
             @RequestParam(value = "name", required = false) Optional<String> name,
@@ -91,9 +95,10 @@ public class CourseController {
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable int id) {
         try {
+
             courseService.deleteCourse(id);
             return new ResponseEntity<>("Course deleted successfully", HttpStatus.OK);
         } catch (EntityNotFoundException e) {

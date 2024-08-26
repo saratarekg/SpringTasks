@@ -1,17 +1,16 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Services;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.Components.JavaCourseRecommender;
+import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Repositories.CourseRepository;
+import javax.persistence.EntityNotFoundException;
 import org.example.Course;
 import org.example.CourseDTO;
-import org.example.CourseRecommender;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -19,14 +18,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -42,9 +39,11 @@ public class CourseServiceTest {
     JavaCourseRecommender courseRecommender;
 
 
-    @InjectMocks
+//    @InjectMocks
     @Autowired
-    CourseService courseService = new CourseService(courseRepository);
+//    CourseService courseService = new CourseService(courseRepository);
+    private CourseService courseService;
+
 
 
     @Test
