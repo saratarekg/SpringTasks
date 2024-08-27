@@ -2,6 +2,7 @@ package com.example.dependencyinjectiontask.Controllers;
 
 import com.example.dependencyinjectiontask.Services.AuthorService;
 import org.example.Author;
+import org.example.AuthorDTO;
 import org.example.Course;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ class AuthorControllerTest {
     void getAuthor_emailExists_returnsAuthor() throws Exception {
         String email= "sara@sumerge.com";
 
-        when(authorService.getAuthorByEmail(email)).thenReturn(any(Author.class));
+        when(authorService.getAuthorByEmail(email)).thenReturn(any(AuthorDTO.class));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/authors/email")
                         .param("email", "sara@sumerge.com")

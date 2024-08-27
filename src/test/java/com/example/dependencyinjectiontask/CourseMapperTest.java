@@ -1,5 +1,6 @@
 package com.example.dependencyinjectiontask;
 
+import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.junit.jupiter.api.Test;
@@ -20,14 +21,18 @@ public class CourseMapperTest {
 
         assertEquals(course.getTitle(), courseDTO.getTitle());
         assertEquals(course.getDescription(), courseDTO.getDescription());
+        assertEquals(course.getCredit(), courseDTO.getCredit());
+
     }
 
     @Test
     void testToCourse() {
-        CourseDTO courseDTO = new CourseDTO( "Java Basics", "Intro to Java");
+        CourseDTO courseDTO = new CourseDTO( "Java Basics", "Intro to Java",4);
         Course course = courseMapper.toCourse(courseDTO);
 
         assertEquals(courseDTO.getTitle(), course.getTitle());
         assertEquals(courseDTO.getDescription(), course.getDescription());
+        assertEquals(courseDTO.getCredit(), course.getCredit());
+
     }
 }

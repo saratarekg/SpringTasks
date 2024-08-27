@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import javax.persistence.EntityNotFoundException;
 
 import com.example.dependencyinjectiontask.Components.JavaCourseRecommender;
-import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import com.example.dependencyinjectiontask.Repositories.CourseRepository;
 import org.example.Course;
 import org.example.CourseDTO;
@@ -47,8 +47,8 @@ public class CourseServiceTest {
 
     @Test
     void viewCourse_courseExists_returnCourseDTO() {
-        Course course = new Course("Java", "Java Description", 1);
-        CourseDTO courseDTO = new CourseDTO("Java", "Java Description");
+        Course course = new Course(502,"Java", "Java Description", 1);
+        CourseDTO courseDTO = new CourseDTO("Java", "Java Description",1);
 
         when(courseRepository.findById(502)).thenReturn(Optional.of(course));
         when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
@@ -74,12 +74,12 @@ public class CourseServiceTest {
     @Test
     void addCourse_courseNotNull_returnCourseDTO() {
         Course course = new Course("Java", "Java Description", 4);
-        CourseDTO courseDTO = new CourseDTO("Java", "Java Description");
-
+        CourseDTO courseDTO = new CourseDTO("Java", "Java Description",4);
+        when(courseMapper.toCourse(courseDTO)).thenReturn(course);
         when(courseRepository.save(course)).thenReturn(course);
         when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
 
-        CourseDTO resultDTO = courseService.addCourse(course);
+        CourseDTO resultDTO = courseService.addCourse(courseDTO);
 
         assertNotNull(resultDTO);
         assertEquals(courseDTO.getTitle(), resultDTO.getTitle());
@@ -90,26 +90,26 @@ public class CourseServiceTest {
 
     @Test
     void addCourse_courseNull_throwsIllegalArgumentException() {
-        Course nullCourse = null;
+        CourseDTO nullCourse = null;
         assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(nullCourse));
 
     }
 
     @Test
     void addCourse_noTitle_throwsIllegalArgumentException() {
-        Course course = new Course(null, "Java Description", 4);
+        CourseDTO course = new CourseDTO(null, "Java Description", 4);
         assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
     }
 
     @Test
     void addCourse_noCredit_throwsIllegalArgumentException() {
-        Course course = new Course("Java", "Java Description", null);
+        CourseDTO course = new CourseDTO("Java", "Java Description", null);
         assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
     }
 
     @Test
     void addCourse_negativeCredit_throwsIllegalArgumentException() {
-        Course course = new Course("Java", "Java Description", -2);
+        CourseDTO course = new CourseDTO("Java", "Java Description", -2);
         assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
     }
 
@@ -186,7 +186,7 @@ public class CourseServiceTest {
 
 
         List<CourseDTO> courseDTOs = first5Courses.stream()
-                .map(course -> new CourseDTO(course.getTitle(), course.getDescription()))
+                .map(course -> new CourseDTO(course.getTitle(), course.getDescription(), course.getCredit()))
                 .collect(Collectors.toList());
 
 

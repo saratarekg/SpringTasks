@@ -2,7 +2,7 @@ package com.example.dependencyinjectiontask.Controllers;
 
 import javax.persistence.EntityNotFoundException;
 
-import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import com.example.dependencyinjectiontask.Services.CourseService;
 import org.example.Course;
 import org.example.CourseDTO;
@@ -42,7 +42,7 @@ public class CourseControllerTest {
     @Test
     void getCourse_courseExists_returnsCourseDTO() throws Exception {
         int courseId = 502;
-        CourseDTO courseDTO = new CourseDTO("testUpdate", "test update");
+        CourseDTO courseDTO = new CourseDTO("testUpdate", "test update",4);
 
         when(courseService.viewCourse(courseId)).thenReturn(courseDTO);
 
@@ -78,9 +78,9 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_courseDetailsEntered_returnsCourse() throws Exception {
-        CourseDTO courseDTO = new CourseDTO("Scalable", "build scalable apps");
+        CourseDTO courseDTO = new CourseDTO("Scalable", "build scalable apps",2);
 
-        when(courseService.addCourse(any(Course.class))).thenReturn(courseDTO);
+        when(courseService.addCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "Scalable")
@@ -94,7 +94,7 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_creditNegative_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(Course.class))).thenThrow(new IllegalArgumentException("Course credit must be a positive number and not empty"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new IllegalArgumentException("Course credit must be a positive number and not empty"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "cs101")
@@ -107,7 +107,7 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_emptyName_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(Course.class))).thenThrow(new IllegalArgumentException("Course title cannot be empty"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new IllegalArgumentException("Course title cannot be empty"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "")
@@ -120,7 +120,7 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_unexpectedError_returnsInternalServerError() throws Exception {
-        when(courseService.addCourse(any(Course.class))).thenThrow(new RuntimeException("Unexpected error"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException("Unexpected error"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "csen101")
@@ -166,7 +166,7 @@ public class CourseControllerTest {
 
     @Test
     void updateCourse_internalServerError_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(Course.class))).thenThrow(new RuntimeException("Failed to update course due to an unexpected error"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException("Failed to update course due to an unexpected error"));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", 1)
                         .param("name", "csen101")
@@ -214,8 +214,8 @@ public class CourseControllerTest {
     @Test
     void discoverRecommendedCourses_returnsRecommendedCourses() throws Exception {
         List<CourseDTO> recommendedCourses = Arrays.asList(
-                new CourseDTO("Java Basics", "Introduction to Java programming"),
-                new CourseDTO("Advanced Java", "In-depth Java concepts and practices")
+                new CourseDTO("Java Basics", "Introduction to Java programming",4),
+                new CourseDTO("Advanced Java", "In-depth Java concepts and practices",4)
         );
 
         when(courseService.showRecommendedCourses()).thenReturn(recommendedCourses);

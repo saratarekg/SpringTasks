@@ -1,7 +1,7 @@
 package com.example.dependencyinjectiontask.Controllers;
 
 import com.example.dependencyinjectiontask.Services.AuthorService;
-import org.example.Author;
+import org.example.AuthorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +26,7 @@ public class AuthorController {
     @GetMapping("email")
     public ResponseEntity<Object> getAuthorByEmail(@RequestParam String email) {
         try {
-            Author author = authorService.getAuthorByEmail(email);
+            AuthorDTO author = authorService.getAuthorByEmail(email);
             return ResponseEntity.ok(author);
         }
         catch (EntityNotFoundException e) {
@@ -35,7 +35,5 @@ public class AuthorController {
         catch (Exception e) {
             return new ResponseEntity<>("Failed to fetch author.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-
     }
-
 }
