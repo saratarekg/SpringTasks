@@ -1,5 +1,6 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Components;
 
+import com.example.dependencyinjectiontask.Repositories.CourseRepository;
 import org.example.Course;
 import org.example.CourseRecommender;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,7 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Services;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Repositories.CourseRepository;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,6 +15,8 @@ import java.util.stream.Collectors;
 import org.example.CourseRecommender;
 import org.example.Course;
 import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityNotFoundException;
 
 
 @Service

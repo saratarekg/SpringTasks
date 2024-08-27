@@ -1,4 +1,4 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Repositories;
 
 import org.example.Author;
 import org.springframework.data.jpa.repository.JpaRepository;

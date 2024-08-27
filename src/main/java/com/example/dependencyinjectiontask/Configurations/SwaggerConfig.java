@@ -1,4 +1,4 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Configurations;
 
 
 import io.swagger.v3.oas.models.Components;
