@@ -2,6 +2,7 @@ package com.example.dependencyinjectiontask.Controllers;
 
 import com.example.dependencyinjectiontask.Services.AuthorService;
 import org.example.Author;
+import org.example.Course;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -13,6 +14,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import javax.persistence.EntityNotFoundException;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,9 +31,8 @@ class AuthorControllerTest {
     @Test
     void getAuthor_emailExists_returnsAuthor() throws Exception {
         String email= "sara@sumerge.com";
-        Author author = new Author("sara","sara@sumerge.com");
 
-        when(authorService.getAuthorByEmail(email)).thenReturn(author);
+        when(authorService.getAuthorByEmail(email)).thenReturn(any(Author.class));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/authors/email")
                         .param("email", "sara@sumerge.com")
