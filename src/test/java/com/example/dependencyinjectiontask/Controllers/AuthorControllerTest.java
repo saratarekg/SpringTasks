@@ -1,8 +1,7 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Controllers;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.Services.AuthorService;
 import org.example.Author;
-import org.example.CourseDTO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -12,12 +11,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
+import javax.persistence.EntityNotFoundException;
+
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers=AuthorController.class)
+@WebMvcTest(controllers= AuthorController.class)
 @ContextConfiguration(classes = AuthorController.class)
 class AuthorControllerTest {
 

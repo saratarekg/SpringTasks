@@ -1,6 +1,6 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Services;
 
-import jakarta.persistence.EntityNotFoundException;
+import com.example.dependencyinjectiontask.Repositories.AuthorRepository;
 import org.example.Author;
 
 import org.junit.jupiter.api.Test;
@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import javax.persistence.EntityNotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
