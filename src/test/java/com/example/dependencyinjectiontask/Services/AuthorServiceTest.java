@@ -1,46 +1,54 @@
 package com.example.dependencyinjectiontask.Services;
 
+import com.example.dependencyinjectiontask.Mappers.AuthorMapper;
 import com.example.dependencyinjectiontask.Repositories.AuthorRepository;
 import org.example.Author;
-
+import org.example.AuthorDTO;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityNotFoundException;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import java.sql.Date;
 
-@SpringBootTest
-class AuthorServiceTest {
-    @MockBean
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+public class AuthorServiceTest {
+
+    @Mock
     private AuthorRepository authorRepository;
 
+    @Mock
+    private AuthorMapper authorMapper;
+
     @InjectMocks
-    @Autowired
     private AuthorService authorService;
 
-    @Test
-    void getAuthor_AuthorExists_returnAuthor() {
-        Author author = new Author("sara","sara@sumerge.com");
-        String email= "sara@sumerge.com";
-
-        when(authorRepository.findByEmail(email)).thenReturn(author);
-
-        Author result = authorService.getAuthorByEmail(email);
-
-        assertEquals(author.getName(), result.getName());
-        assertEquals(author.getEmail(), result.getEmail());
-
+    public AuthorServiceTest() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    void getAuthor_authorNotExists_returnAuthor() {
-        String email= "sara@sumerge.com";
+    void getAuthor_AuthorExists_returnAuthorDTO() {
+        Date birthdate = new Date(23/6/2002);
+        Author author = new Author("Sara", "sara@sumerge.com", birthdate);        AuthorDTO authorDTO = new AuthorDTO("Sara", "sara@sumerge.com");
+        String email = "sara@sumerge.com";
+
+        when(authorRepository.findByEmail(email)).thenReturn(author);
+        when(authorMapper.toAuthorDTO(author)).thenReturn(authorDTO);
+
+        AuthorDTO result = authorService.getAuthorByEmail(email);
+
+        assertEquals(authorDTO.getName(), result.getName());
+        assertEquals(authorDTO.getEmail(), result.getEmail());
+    }
+
+    @Test
+    void getAuthor_authorNotExists_throwsEntityNotFoundException() {
+        String email = "sara@sumerge.com";
 
         when(authorRepository.findByEmail(email)).thenReturn(null);
 
@@ -49,8 +57,5 @@ class AuthorServiceTest {
         });
 
         verify(authorRepository).findByEmail(email);
-
-
     }
-
 }

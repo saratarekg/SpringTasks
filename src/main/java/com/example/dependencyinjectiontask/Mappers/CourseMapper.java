@@ -1,4 +1,4 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Mappers;
 
 import org.example.Course;
 import org.example.CourseDTO;

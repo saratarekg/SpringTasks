@@ -1,6 +1,6 @@
 package com.example.dependencyinjectiontask.Services;
 
-import com.example.dependencyinjectiontask.CourseMapper;
+import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import com.example.dependencyinjectiontask.Repositories.CourseRepository;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.example.CourseRecommender;
@@ -52,42 +51,31 @@ public class CourseService {
 
 
     public CourseDTO viewCourse(int id) {
-        Optional<Course> optionalCourse = courseRepository.findById(id);
-
-        if (optionalCourse.isPresent()) {
-            Course course = optionalCourse.get();
-            return courseMapper.toCourseDTO(course);
-        } else {
-            throw new EntityNotFoundException("Course with id " + id + " not found");
-        }
+        return courseRepository.findById(id)
+                .map(courseMapper::toCourseDTO)
+                .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
 
     public Course viewCourseC(int id) {
-        Optional<Course> optionalCourse = courseRepository.findById(id);
-
-        if (optionalCourse.isPresent()) {
-            Course course = optionalCourse.get();
-            return course;
-        } else {
-            throw new EntityNotFoundException("Course with id " + id + " not found");
-        }
+        return courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
 
 
-    public CourseDTO addCourse(Course course) {
-        if (course == null) {
+    public CourseDTO addCourse(CourseDTO courseDTO) {
+        if (courseDTO == null) {
             throw new IllegalArgumentException("Course cannot be null");
         }
-        if (course.getTitle() == null || course.getTitle().isEmpty()) {
+        if (courseDTO.getTitle() == null || courseDTO.getTitle().isEmpty()) {
             throw new IllegalArgumentException("Course title cannot be empty");
         }
-        if (course.getCredit() == null || course.getCredit() <= 0) {
+        if (courseDTO.getCredit() == null || courseDTO.getCredit() <= 0) {
             throw new IllegalArgumentException("Course credit must be a positive number and not empty");
         }
+        Course course = courseMapper.toCourse(courseDTO);
         Course addedCourse = courseRepository.save(course);
         return courseMapper.toCourseDTO(addedCourse);
     }
-
 
 
 
@@ -95,8 +83,7 @@ public class CourseService {
         if (!courseRepository.existsById(course.getId())) {
             throw new EntityNotFoundException("Course not found with ID: " + course.getId());
         }
-        Course updatedCourse = courseRepository.save(course);
-        return updatedCourse;
+        return courseRepository.save(course);
     }
 
 
