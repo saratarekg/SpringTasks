@@ -11,17 +11,17 @@ import org.springframework.stereotype.Component;
 
 
 
-@Component
+//@Component
 public class AdminFilter extends HttpFilter {
 
     @Override
-    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException, ServletException {
-        String uri = request.getRequestURI();
-
-        if (uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs")) {
-            filterChain.doFilter(request, response);
-            return;
-        }
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
+//        String uri = request.getRequestURI();
+//        System.out.println(uri);
+//        if (uri.startsWith("/swagger") || uri.startsWith("/v3/api-docs")) {
+//            filterChain.doFilter(request, response);
+//            return;
+//        }
         String token = request.getHeader("Authorization");
 
         System.out.println("inside filter");
