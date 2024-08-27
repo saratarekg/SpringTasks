@@ -1,6 +1,6 @@
 package org.example;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 import java.sql.Date;
 import java.util.Set;
@@ -10,7 +10,7 @@ import java.util.Set;
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Integer id;
 
     @Column(name = "name")
     private String name;
@@ -35,7 +35,6 @@ public class Author {
     }
 
     public Author() {
-        
     }
 
     public int getId() { return id; }
@@ -49,8 +48,4 @@ public class Author {
 
     public Date getBirthdate() { return birthdate; }
     public void setBirthdate(Date birthdate) { this.birthdate = birthdate; }
-
-
-
 }
-

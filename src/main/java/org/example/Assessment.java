@@ -1,6 +1,6 @@
 package org.example;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 
 @Entity
 @Table(name="Assessment")
