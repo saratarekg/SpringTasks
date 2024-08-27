@@ -3,14 +3,17 @@ package org.example;
 public class CourseDTO {
     private String title;
     private String description;
+    private Integer credit;
+
 
     // Constructors
     public CourseDTO() {
     }
 
-    public CourseDTO(String title, String description) {
+    public CourseDTO(String title, String description, Integer credit) {
         this.title = title;
         this.description = description;
+        this.credit = credit;
     }
 
 
@@ -30,7 +33,8 @@ public class CourseDTO {
         this.description = description;
     }
 
-
+    public Integer getCredit() { return credit; }
+    public void setCredit(int credit) { this.credit = credit; }
 
 
     @Override

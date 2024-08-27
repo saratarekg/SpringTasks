@@ -29,9 +29,10 @@ public class Author {
     )
     private Set<Course> courses;
 
-    public Author(String name, String email) {
+    public Author(String name, String email, Date birthdate) {
         this.name = name;
         this.email = email;
+        this.birthdate = birthdate;
     }
 
     public Author() {
