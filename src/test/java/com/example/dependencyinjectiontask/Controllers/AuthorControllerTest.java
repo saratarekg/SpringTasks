@@ -1,5 +1,6 @@
 package com.example.dependencyinjectiontask.Controllers;
 
+import com.example.dependencyinjectiontask.GlobalExceptionHandler;
 import com.example.dependencyinjectiontask.Services.AuthorService;
 import org.example.Author;
 import org.example.AuthorDTO;
@@ -17,10 +18,12 @@ import javax.persistence.EntityNotFoundException;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(controllers= AuthorController.class)
-@ContextConfiguration(classes = AuthorController.class)
+@ContextConfiguration(classes = {AuthorController.class, GlobalExceptionHandler.class})
+
 class AuthorControllerTest {
 
     @Autowired
@@ -58,12 +61,14 @@ class AuthorControllerTest {
     void getAuthor_catchesException_returnsInternalServerError() throws Exception {
         String email= "sara@sumerge.com";
 
-        when(authorService.getAuthorByEmail(email)).thenThrow(new RuntimeException("Failed to fetch author."));
+        when(authorService.getAuthorByEmail(email)).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/authors/email")
                         .param("email", "sara@sumerge.com")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("An error occurred. Please try again later."));
+
     }
 
 }

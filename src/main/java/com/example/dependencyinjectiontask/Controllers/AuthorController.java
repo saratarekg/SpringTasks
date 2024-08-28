@@ -25,15 +25,8 @@ public class AuthorController {
 
     @GetMapping("email")
     public ResponseEntity<Object> getAuthorByEmail(@RequestParam String email) {
-        try {
             AuthorDTO author = authorService.getAuthorByEmail(email);
             return ResponseEntity.ok(author);
-        }
-        catch (EntityNotFoundException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>("Failed to fetch author.", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+
     }
 }
