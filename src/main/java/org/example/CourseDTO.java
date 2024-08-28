@@ -1,8 +1,21 @@
 package org.example;
 
+
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+
 public class CourseDTO {
+    @Valid
+    @NotEmpty(message = "Course title cannot be empty")
     private String title;
+
     private String description;
+
+    @Valid
+    @NotNull(message = "Course credit must not be null")
+    @Min(value = 1, message = "Course credit must be a positive number")
     private Integer credit;
 
 

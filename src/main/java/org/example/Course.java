@@ -1,5 +1,6 @@
 package org.example;
 
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,7 +9,7 @@ import java.util.Set;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer id;
+    private long id;
 
     @Column(name = "name")
     private String title;
@@ -25,13 +26,14 @@ public class Course {
     @OneToOne(mappedBy = "course")
     private Assessment assessment;
 
-    public Course(int id, String title, String description, Integer credit) {
-       this.id = id;
+
+    public Course(String title, String description, Integer credit) {
         this.title = title;
         this.description = description;
         this.credit = credit;
     }
-    public Course(String title, String description, Integer credit) {
+    public Course(int id, String title, String description, Integer credit) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.credit = credit;
@@ -41,7 +43,7 @@ public class Course {
 
     }
 
-    public int getId() { return id; }
+    public long getId() { return id; }
     public void setId(int id) { this.id = id; }
 
     public String getTitle() {
