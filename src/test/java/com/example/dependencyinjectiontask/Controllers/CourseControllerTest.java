@@ -26,6 +26,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers= CourseController.class)
@@ -127,32 +128,33 @@ void addCourse_invalidCourseDetails_returnsBadRequest() throws Exception {
 
     @Test
     void updateCourse_courseExists_returnsUpdatedCourse() throws Exception {
-        int courseId = 502;
-        Course Course = new Course( courseId,"Java2", "Java Description", 4);
-        Course updatedCourse = new Course(courseId,"Java3", "Java Description", 4);
+        Long courseId = 1L;
+        CourseDTO updateDTO = new CourseDTO("New Title","New Description",3);
 
-        when(courseService.viewCourseC(courseId)).thenReturn(Course);
-        when(courseService.updateCourse(any(Course.class))).thenReturn(updatedCourse);
+        when(courseService.updateCourse(anyLong(), any(CourseDTO.class))).thenReturn(updateDTO);
+        String jsonRequest = "{\"title\": \"New Title\", \"description\": \"New Description\", \"credit\": 3}";
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", courseId)
-                        .param("name", "Java3")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/api/courses/update/{id}", courseId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(courseId))
-                .andExpect(jsonPath("$.title").value("Java3"))
-                .andExpect(jsonPath("$.description").value("Java Description"))
-                .andExpect(jsonPath("$.credit").value(4));
+                .andExpect(jsonPath("$.title").value("New Title"))
+                .andExpect(jsonPath("$.description").value("New Description"))
+                .andExpect(jsonPath("$.credit").value(3));
+
+        verify(courseService, times(1)).updateCourse(anyLong(), any(CourseDTO.class));
     }
 
     @Test
     void updateCourse_courseNotExists_returnsNotFound() throws Exception {
-        int courseId = 999;
+        Long courseId = 999L;
 
-        when(courseService.viewCourseC(courseId)).thenThrow(new EntityNotFoundException("Course with id " + courseId + " not found"));
+        when(courseService.updateCourse(anyLong(), any(CourseDTO.class))).thenThrow(new EntityNotFoundException("Course with id " + courseId + " not found"));
+        String jsonRequest = "{\"title\": \"New Title\", \"description\": \"New Description\", \"credit\": 3}";
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", courseId)
-                        .param("name", "csen101")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/api/courses/update/{id}", courseId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Course with id " + courseId + " not found"));
     }
@@ -160,16 +162,16 @@ void addCourse_invalidCourseDetails_returnsBadRequest() throws Exception {
 
     @Test
     void updateCourse_internalServerError_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException());
+        when(courseService.updateCourse(anyLong(), any(CourseDTO.class))).thenThrow(new RuntimeException());
+        String jsonRequest = "{\"title\": \"New Title\", \"description\": \"New Description\", \"credit\": 3}";
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", 1)
-                        .param("name", "csen101")
-                        .param("description", "a cs course")
-                        .param("credit", "2")
-                        .accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(put("/api/courses/update/{id}", 1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string("An error occurred. Please try again later."));
     }
+
 
     @Test
     void deleteCourse_courseNotExists_returnsNotFound() throws Exception {

@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.example.CourseRecommender;
@@ -63,27 +64,28 @@ public class CourseService {
 
 
     public CourseDTO addCourse(CourseDTO courseDTO) {
-//        if (courseDTO == null) {
-//            throw new IllegalArgumentException("Course cannot be null");
-//        }
-//        if (courseDTO.getTitle() == null || courseDTO.getTitle().isEmpty()) {
-//            throw new IllegalArgumentException("Course title cannot be empty");
-//        }
-//        if (courseDTO.getCredit() == null || courseDTO.getCredit() <= 0) {
-//            throw new IllegalArgumentException("Course credit must be a positive number and not empty");
-//        }
         Course course = courseMapper.toCourse(courseDTO);
         courseRepository.save(course);
         return courseMapper.toCourseDTO(course);
     }
 
 
+    public CourseDTO updateCourse(Long id, CourseDTO courseUpdateDTO) {
+        Course course = courseRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Course not found with ID: " + id));
 
-    public Course updateCourse(Course course) {
-        if (!courseRepository.existsById(course.getId())) {
-            throw new EntityNotFoundException("Course not found with ID: " + course.getId());
+        if (!Objects.equals(courseUpdateDTO.getTitle(), "string")) {
+            course.setTitle(courseUpdateDTO.getTitle());
         }
-        return courseRepository.save(course);
+        if (!Objects.equals(courseUpdateDTO.getDescription(), "string")) {
+            course.setDescription(courseUpdateDTO.getDescription());
+        }
+        if (courseUpdateDTO.getCredit() != 1) {
+            course.setCredit(courseUpdateDTO.getCredit());
+        }
+
+        Course updatedCourse = courseRepository.save(course);
+        return courseMapper.toCourseDTO(updatedCourse);
     }
 
 
@@ -98,7 +100,6 @@ public class CourseService {
 
     public Page<Course> viewAllCoursesPaginated(Pageable pageable) {
         Page<Course> courses = courseRepository.findAll(pageable);
-
         if (courses.isEmpty()) {
             throw new EntityNotFoundException("No courses found");
         }

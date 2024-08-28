@@ -27,6 +27,7 @@ import java.util.stream.IntStream;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.any;
 
 @SpringBootTest
 public class CourseServiceTest {
@@ -91,27 +92,29 @@ public class CourseServiceTest {
 
     @Test
     void updateCourse_courseExists_returnCourseDTO() {
-        Course course = new Course(502,"Java","Java Description", 2);
-        Course updatedCourse = new Course(502,"Java","Java Description",  2);
+        Long courseId = 1L;
+        Course existingCourse = new Course(Math.toIntExact(courseId),"Old Title","Old Description",2);
+        CourseDTO updateDTO = new CourseDTO("New Title","New Description",3);
 
-        when(courseRepository.existsById(502L)).thenReturn(true);
-        when(courseRepository.save(course)).thenReturn(updatedCourse);
+        when(courseRepository.findById(courseId)).thenReturn(Optional.of(existingCourse));
+        when(courseRepository.save(existingCourse)).thenReturn(existingCourse);
+        when(courseMapper.toCourseDTO(existingCourse)).thenReturn(updateDTO);
 
-        Course result = courseService.updateCourse(course);
+        CourseDTO updatedCourseDTO = courseService.updateCourse(courseId, updateDTO);
 
-        assertEquals(updatedCourse.getTitle(), result.getTitle());
-        assertEquals(updatedCourse.getDescription(), result.getDescription());
-        assertEquals(updatedCourse.getCredit(), result.getCredit());
+        assertEquals("New Title", existingCourse.getTitle());
+        assertEquals("New Description", existingCourse.getDescription());
+        assertEquals(3, existingCourse.getCredit());
 
-        verify(courseRepository).save(course);
-
-
+        assertEquals(updateDTO, updatedCourseDTO);
+        verify(courseRepository).save(existingCourse);
     }
+
+
 
     @Test
     void updateCourse_courseNotExists_throwsEntityNotFoundException() {
-        Course course = new Course(1,"test update","test update exception", 2);
-        assertThrows(EntityNotFoundException.class, () -> courseService.updateCourse(course));
+        assertThrows(EntityNotFoundException.class, () -> courseService.updateCourse(1L,new CourseDTO()));
     }
 
     @Test
