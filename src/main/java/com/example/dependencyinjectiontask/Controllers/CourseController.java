@@ -40,37 +40,26 @@ public class CourseController {
         return ResponseEntity.ok(addedCourse);
     }
 
+@PutMapping("/update/{id}")
+public ResponseEntity<CourseDTO> updateCourse(
+        @PathVariable("id") Long id,
+        @Valid @RequestBody CourseDTO courseDTO) {
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Object> updateCourse(
-            @PathVariable("id") int id,
-            @RequestParam(value = "name", required = false) Optional<String> name,
-            @RequestParam(value = "description", required = false) Optional<String> description,
-            @RequestParam(value = "credit", required = false) Optional<Integer> credit) {
+    CourseDTO updatedCourse = courseService.updateCourse(id, courseDTO);
+    return ResponseEntity.ok(updatedCourse);
+}
 
-            Course course = courseService.viewCourseC(id);
-            course.setTitle(name.orElse(course.getTitle()));
-            course.setDescription(description.orElse(course.getDescription()));
-            course.setCredit(credit.orElse(course.getCredit()));
-            Course updatedCourse = courseService.updateCourse(course);
-            return ResponseEntity.ok(updatedCourse);
-
-    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCourse(@PathVariable int id) {
-
             courseService.deleteCourse(id);
             return ResponseEntity.ok("Course deleted successfully");
-
     }
 
     @GetMapping("/recommended")
     public ResponseEntity<Object> discoverRecommendedCourses() {
-
             List<CourseDTO> courses = courseService.showRecommendedCourses();
             return ResponseEntity.ok(courses);
-
     }
 
     @GetMapping("/paginated")
