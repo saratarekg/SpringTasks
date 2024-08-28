@@ -50,31 +50,31 @@ public class CourseService {
     }
 
 
-    public CourseDTO viewCourse(int id) {
+    public CourseDTO viewCourse(long id) {
         return courseRepository.findById(id)
                 .map(courseMapper::toCourseDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
 
-    public Course viewCourseC(int id) {
+    public Course viewCourseC(long id) {
         return courseRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
 
 
     public CourseDTO addCourse(CourseDTO courseDTO) {
-        if (courseDTO == null) {
-            throw new IllegalArgumentException("Course cannot be null");
-        }
-        if (courseDTO.getTitle() == null || courseDTO.getTitle().isEmpty()) {
-            throw new IllegalArgumentException("Course title cannot be empty");
-        }
-        if (courseDTO.getCredit() == null || courseDTO.getCredit() <= 0) {
-            throw new IllegalArgumentException("Course credit must be a positive number and not empty");
-        }
+//        if (courseDTO == null) {
+//            throw new IllegalArgumentException("Course cannot be null");
+//        }
+//        if (courseDTO.getTitle() == null || courseDTO.getTitle().isEmpty()) {
+//            throw new IllegalArgumentException("Course title cannot be empty");
+//        }
+//        if (courseDTO.getCredit() == null || courseDTO.getCredit() <= 0) {
+//            throw new IllegalArgumentException("Course credit must be a positive number and not empty");
+//        }
         Course course = courseMapper.toCourse(courseDTO);
-        Course addedCourse = courseRepository.save(course);
-        return courseMapper.toCourseDTO(addedCourse);
+        courseRepository.save(course);
+        return courseMapper.toCourseDTO(course);
     }
 
 
@@ -87,7 +87,7 @@ public class CourseService {
     }
 
 
-    public void deleteCourse(int id) {
+    public void deleteCourse(long id) {
         if (courseRepository.existsById(id)) {
             courseRepository.deleteById(id);
         } else {

@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,23 +32,14 @@ public class CourseController {
     public ResponseEntity<Object> getCourse(@PathVariable int id) {
             CourseDTO course = courseService.viewCourse(id);
             return ResponseEntity.ok(course);
-
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addCourse(
-            @RequestParam(value = "name") String name,
-            @RequestParam(value = "description", required = false) Optional<String> description,
-            @RequestParam(value = "credit") Integer credit) {
-
-            CourseDTO courseDTO = new CourseDTO();
-            courseDTO.setTitle(name);
-            courseDTO.setDescription(description.orElse(null));
-            courseDTO.setCredit(credit);
-            CourseDTO addedCourse = courseService.addCourse(courseDTO);
-            return ResponseEntity.ok(addedCourse);
-
+    public ResponseEntity<Object> addCourse(@Valid @RequestBody CourseDTO courseDTO) {
+        CourseDTO addedCourse = courseService.addCourse(courseDTO);
+        return ResponseEntity.ok(addedCourse);
     }
+
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Object> updateCourse(

@@ -28,8 +28,8 @@ class JavaCourseRecommenderTest {
     void recommendedCourses_coursesFound_returnsCourses() {
 
         List<Course> courses = Arrays.asList(
-                new Course(1, "Course 1", "Description 1", 3),
-                new Course(2, "Course 2", "Description 2", 3)
+                new Course("Course 1", "Description 1", 3),
+                new Course("Course 2", "Description 2", 3)
         );
         when(courseRepository.findAll()).thenReturn(courses);
 

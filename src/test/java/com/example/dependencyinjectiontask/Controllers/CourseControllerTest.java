@@ -19,6 +19,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,45 +80,37 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_courseDetailsEntered_returnsCourse() throws Exception {
-        CourseDTO courseDTO = new CourseDTO("Scalable", "build scalable apps",2);
+        CourseDTO courseDTO = new CourseDTO("Scalable", "build scalable apps", 2);
 
         when(courseService.addCourse(any(CourseDTO.class))).thenReturn(courseDTO);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
-                        .param("name", "Scalable")
-                        .param("description", "build scalable apps")
-                        .param("credit", "2")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"title\":\"Scalable\",\"description\":\"build scalable apps\",\"credit\":2}")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value("Scalable"))
-                .andExpect(jsonPath("$.description").value("build scalable apps")) ;
+                .andExpect(jsonPath("$.description").value("build scalable apps"))
+                .andExpect(jsonPath("$.credit").value(2));
     }
 
-    @Test
-    void addCourse_creditNegative_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new IllegalArgumentException("Course credit must be a positive number and not empty"));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
-                        .param("name", "cs101")
-                        .param("description", "a cs course")
-                        .param("credit", "-2")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Course credit must be a positive number and not empty"));
+@Test
+void addCourse_invalidCourseDetails_returnsBadRequest() throws Exception {
+    String invalidCourseJson = """
+    {
+        "title": "",
+        "description": "Sample description",
+        "credit": 0
     }
+    """;
 
-    @Test
-    void addCourse_emptyName_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new IllegalArgumentException("Course title cannot be empty"));
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
-                        .param("name", "")
-                        .param("description", "a cs course")
-                        .param("credit", "2")
-                        .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Course title cannot be empty"));
-    }
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(invalidCourseJson))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andExpect(MockMvcResultMatchers.jsonPath("$.title").value("Course title cannot be empty"))
+            .andExpect(MockMvcResultMatchers.jsonPath("$.credit").value("Course credit must be a positive number"));
+}
 
     @Test
     void addCourse_unexpectedError_returnsInternalServerError() throws Exception {
@@ -135,8 +128,8 @@ public class CourseControllerTest {
     @Test
     void updateCourse_courseExists_returnsUpdatedCourse() throws Exception {
         int courseId = 502;
-        Course Course = new Course(courseId, "Java2", "Java Description", 4);
-        Course updatedCourse = new Course(courseId, "Java3", "Java Description", 4);
+        Course Course = new Course( courseId,"Java2", "Java Description", 4);
+        Course updatedCourse = new Course(courseId,"Java3", "Java Description", 4);
 
         when(courseService.viewCourseC(courseId)).thenReturn(Course);
         when(courseService.updateCourse(any(Course.class))).thenReturn(updatedCourse);
@@ -248,8 +241,8 @@ public class CourseControllerTest {
         int size = 10;
 
         List<Course> courseList = List.of(
-                new Course(1, "Course 1", "Description 1", 3),
-                new Course(2, "Course 2", "Description 2", 4)
+                new Course( 1,"Course 1", "Description 1", 3),
+                new Course(2,"Course 2", "Description 2", 4)
         );
 
         Page<Course> coursePage = new PageImpl<>(courseList);
