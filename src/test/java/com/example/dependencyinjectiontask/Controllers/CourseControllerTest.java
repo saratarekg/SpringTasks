@@ -2,6 +2,7 @@ package com.example.dependencyinjectiontask.Controllers;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.example.dependencyinjectiontask.GlobalExceptionHandler;
 import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import com.example.dependencyinjectiontask.Services.CourseService;
 import org.example.Course;
@@ -27,7 +28,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(controllers= CourseController.class)
-@ContextConfiguration(classes = CourseController.class)
+@ContextConfiguration(classes = {CourseController.class, GlobalExceptionHandler.class})
 public class CourseControllerTest {
 
     @Autowired
@@ -68,12 +69,12 @@ public class CourseControllerTest {
     @Test
     void getCourse_unexpectedError_returnsInternalServerError() throws Exception {
         int courseId = 1;
-        when(courseService.viewCourse(courseId)).thenThrow(new RuntimeException("Unexpected error"));
+        when(courseService.viewCourse(courseId)).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/courses/{id}", courseId)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to get course due to an unexpected error"));
+                .andExpect(content().string("An error occurred. Please try again later."));
     }
 
     @Test
@@ -120,7 +121,7 @@ public class CourseControllerTest {
 
     @Test
     void addCourse_unexpectedError_returnsInternalServerError() throws Exception {
-        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException("Unexpected error"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/courses/add")
                         .param("name", "csen101")
@@ -128,7 +129,7 @@ public class CourseControllerTest {
                         .param("credit", "2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to add course due to an unexpected error"));
+                .andExpect(content().string("An error occurred. Please try again later."));
     }
 
     @Test
@@ -166,7 +167,7 @@ public class CourseControllerTest {
 
     @Test
     void updateCourse_internalServerError_returnsBadRequest() throws Exception {
-        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException("Failed to update course due to an unexpected error"));
+        when(courseService.addCourse(any(CourseDTO.class))).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/courses/update/{id}", 1)
                         .param("name", "csen101")
@@ -174,7 +175,7 @@ public class CourseControllerTest {
                         .param("credit", "2")
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
-                .andExpect(content().string("Failed to update course due to an unexpected error"));
+                .andExpect(content().string("An error occurred. Please try again later."));
     }
 
     @Test
@@ -232,11 +233,13 @@ public class CourseControllerTest {
 
     @Test
     void discoverRecommendedCourses_catchesException_returnsInternalServerError() throws Exception {
-        when(courseService.showRecommendedCourses()).thenThrow(new RuntimeException("No courses found"));
+        when(courseService.showRecommendedCourses()).thenThrow(new RuntimeException());
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/courses/recommended")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("An error occurred. Please try again later."));
+
     }
 
     @Test
@@ -281,12 +284,14 @@ public class CourseControllerTest {
         int page = 0;
         int size = 10;
 
-        when(courseService.viewAllCoursesPaginated(PageRequest.of(page, size))).thenThrow(new RuntimeException("Failed to fetch paginated courses."));
+        when(courseService.viewAllCoursesPaginated(PageRequest.of(page, size))).thenThrow(new RuntimeException());
 
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/courses/paginated")
                         .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isInternalServerError());
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().string("An error occurred. Please try again later."));
+
     }
 
 
