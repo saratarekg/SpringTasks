@@ -16,7 +16,7 @@ public class CourseMapperTest {
 
     @Test
     void testToCourseDTO() {
-        Course course = new Course(1, "Java Basics", "Intro to Java", 3);
+        Course course = new Course("Java Basics", "Intro to Java", 3);
         CourseDTO courseDTO = courseMapper.toCourseDTO(course);
 
         assertEquals(course.getTitle(), courseDTO.getTitle());

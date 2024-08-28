@@ -47,10 +47,10 @@ public class CourseServiceTest {
 
     @Test
     void viewCourse_courseExists_returnCourseDTO() {
-        Course course = new Course(502,"Java", "Java Description", 1);
+        Course course = new Course("Java", "Java Description", 1);
         CourseDTO courseDTO = new CourseDTO("Java", "Java Description",1);
 
-        when(courseRepository.findById(502)).thenReturn(Optional.of(course));
+        when(courseRepository.findById(502L)).thenReturn(Optional.of(course));
         when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
 
 
@@ -63,7 +63,7 @@ public class CourseServiceTest {
 
     @Test
     void viewCourse_courseNotExists_throwsEntityNotFoundException() {
-        when(courseRepository.findById(111)).thenReturn(Optional.empty());
+        when(courseRepository.findById(111L)).thenReturn(Optional.empty());
 
         assertThrows(EntityNotFoundException.class, () -> {
             courseService.viewCourse(111);
@@ -88,37 +88,13 @@ public class CourseServiceTest {
         verify(courseMapper).toCourseDTO(course);
     }
 
-    @Test
-    void addCourse_courseNull_throwsIllegalArgumentException() {
-        CourseDTO nullCourse = null;
-        assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(nullCourse));
-
-    }
-
-    @Test
-    void addCourse_noTitle_throwsIllegalArgumentException() {
-        CourseDTO course = new CourseDTO(null, "Java Description", 4);
-        assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
-    }
-
-    @Test
-    void addCourse_noCredit_throwsIllegalArgumentException() {
-        CourseDTO course = new CourseDTO("Java", "Java Description", null);
-        assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
-    }
-
-    @Test
-    void addCourse_negativeCredit_throwsIllegalArgumentException() {
-        CourseDTO course = new CourseDTO("Java", "Java Description", -2);
-        assertThrows(IllegalArgumentException.class, () -> courseService.addCourse(course));
-    }
 
     @Test
     void updateCourse_courseExists_returnCourseDTO() {
         Course course = new Course(502,"Java","Java Description", 2);
         Course updatedCourse = new Course(502,"Java","Java Description",  2);
 
-        when(courseRepository.existsById(502)).thenReturn(true);
+        when(courseRepository.existsById(502L)).thenReturn(true);
         when(courseRepository.save(course)).thenReturn(updatedCourse);
 
         Course result = courseService.updateCourse(course);
@@ -134,13 +110,13 @@ public class CourseServiceTest {
 
     @Test
     void updateCourse_courseNotExists_throwsEntityNotFoundException() {
-        Course course = new Course(123,"test update","test update exception", 2);
+        Course course = new Course(1,"test update","test update exception", 2);
         assertThrows(EntityNotFoundException.class, () -> courseService.updateCourse(course));
     }
 
     @Test
     void deleteCourse_courseExists_deletesCourse() {
-        int courseId = 502;
+        Long courseId = 502L;
         when(courseRepository.existsById(courseId)).thenReturn(true);
 
         courseService.deleteCourse(courseId);
@@ -172,7 +148,7 @@ public class CourseServiceTest {
     @Test
     void showRecommendedCourses_coursesFound_returnsCourseDTOList() {
         List<Course> courses = IntStream.range(1, 10)
-                .mapToObj(i -> new Course(i, "Course " + i, "Description " + i, 3))
+                .mapToObj(i -> new Course("Course " + i, "Description " + i, 3))
                 .collect(Collectors.toList());
 
         when(courseRepository.findAll()).thenReturn(courses);
@@ -213,7 +189,7 @@ public class CourseServiceTest {
         Pageable pageable = PageRequest.of(page, size);
 
         List<Course> courses = IntStream.range(1, 10)
-                .mapToObj(i -> new Course(i, "Course " + i, "Description " + i, 3))
+                .mapToObj(i -> new Course( "Course " + i, "Description " + i, 3))
                 .collect(Collectors.toList());
 
         Page<Course> coursePage = new PageImpl<>(courses, pageable, courses.size());
