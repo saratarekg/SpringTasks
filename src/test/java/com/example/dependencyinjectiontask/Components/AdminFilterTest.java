@@ -1,7 +1,6 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Components;
 
 
-import com.example.dependencyinjectiontask.Components.AdminFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,7 +24,7 @@ class AdminFilterTest {
     }
 
     @Test
-    void testDoFilterWithNoAuthorizationHeader() throws IOException, ServletException {
+    void doFilter_noAuthorizationHeader_returnUnauthorized() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         MockHttpServletResponse response = new MockHttpServletResponse();
         MockFilterChain filterChain = new MockFilterChain();
@@ -37,7 +36,7 @@ class AdminFilterTest {
     }
 
     @Test
-    void testDoFilterWithInvalidAuthorizationHeader() throws IOException, ServletException {
+    void doFilter_invalidAuthorizationHeader_returnForbidden() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "InvalidToken");
         MockHttpServletResponse response = new MockHttpServletResponse();
@@ -50,7 +49,7 @@ class AdminFilterTest {
     }
 
     @Test
-    void testDoFilterWithValidAuthorizationHeader() throws IOException, ServletException {
+    void doFilter_validAuthorizationHeader_returnOK() throws IOException, ServletException {
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader("Authorization", "Admin");
         MockHttpServletResponse response = new MockHttpServletResponse();

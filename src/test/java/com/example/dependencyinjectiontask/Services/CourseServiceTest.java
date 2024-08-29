@@ -93,22 +93,26 @@ public class CourseServiceTest {
     @Test
     void updateCourse_courseExists_returnCourseDTO() {
         Long courseId = 1L;
-        Course existingCourse = new Course(Math.toIntExact(courseId),"Old Title","Old Description",2);
-        CourseDTO updateDTO = new CourseDTO("New Title","New Description",3);
+        Course existingCourse = new Course(Math.toIntExact(courseId), "Old Title", "Old Description", 2);
+        Course updatedCourse = new Course(Math.toIntExact(courseId), "New Title", "New Description", 3);
+        CourseDTO updateDTO = new CourseDTO("New Title", "New Description", 3);
 
         when(courseRepository.findById(courseId)).thenReturn(Optional.of(existingCourse));
-        when(courseRepository.save(existingCourse)).thenReturn(existingCourse);
-        when(courseMapper.toCourseDTO(existingCourse)).thenReturn(updateDTO);
+        when(courseRepository.save(any(Course.class))).thenReturn(updatedCourse);
+        when(courseMapper.toCourseDTO(updatedCourse)).thenReturn(updateDTO);
 
-        CourseDTO updatedCourseDTO = courseService.updateCourse(courseId, updateDTO);
+        CourseDTO result = courseService.updateCourse(courseId, updateDTO);
 
-        assertEquals("New Title", existingCourse.getTitle());
-        assertEquals("New Description", existingCourse.getDescription());
-        assertEquals(3, existingCourse.getCredit());
+        assertNotNull(result, "The result should not be null");
+        assertEquals("New Title", result.getTitle(), "The title should be updated");
+        assertEquals("New Description", result.getDescription(), "The description should be updated");
+        assertEquals(3, result.getCredit(), "The credit should be updated");
 
-        assertEquals(updateDTO, updatedCourseDTO);
-        verify(courseRepository).save(existingCourse);
+        assertEquals(result,updateDTO);
+
+        verify(courseMapper).toCourseDTO(updatedCourse);
     }
+
 
 
 

@@ -1,6 +1,5 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Components;
 
-import com.example.dependencyinjectiontask.Components.JavaCourseRecommender;
 import com.example.dependencyinjectiontask.Repositories.CourseRepository;
 import org.example.Course;
 import org.junit.jupiter.api.Test;

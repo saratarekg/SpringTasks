@@ -39,8 +39,6 @@ public class CourseControllerTest {
     @MockBean
     private CourseService courseService;
 
-    @Mock
-    private CourseMapper courseMapper;
 
     @Test
     void getCourse_courseExists_returnsCourseDTO() throws Exception {

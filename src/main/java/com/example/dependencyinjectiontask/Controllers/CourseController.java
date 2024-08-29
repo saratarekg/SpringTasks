@@ -8,14 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -29,7 +26,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getCourse(@PathVariable int id) {
+    public ResponseEntity<CourseDTO> getCourse(@PathVariable int id) {
             CourseDTO course = courseService.viewCourse(id);
             return ResponseEntity.ok(course);
     }
@@ -57,13 +54,13 @@ public ResponseEntity<CourseDTO> updateCourse(
     }
 
     @GetMapping("/recommended")
-    public ResponseEntity<Object> discoverRecommendedCourses() {
+    public ResponseEntity<List<CourseDTO>> discoverRecommendedCourses() {
             List<CourseDTO> courses = courseService.showRecommendedCourses();
             return ResponseEntity.ok(courses);
     }
 
     @GetMapping("/paginated")
-    public ResponseEntity<Object> discoverAllCourses(
+    public ResponseEntity<Page<Course>> discoverAllCourses(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size);

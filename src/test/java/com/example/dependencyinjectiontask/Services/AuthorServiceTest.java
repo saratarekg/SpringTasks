@@ -34,7 +34,8 @@ public class AuthorServiceTest {
     @Test
     void getAuthor_AuthorExists_returnAuthorDTO() {
         Date birthdate = new Date(23/6/2002);
-        Author author = new Author("Sara", "sara@sumerge.com", birthdate);        AuthorDTO authorDTO = new AuthorDTO("Sara", "sara@sumerge.com");
+        Author author = new Author("Sara", "sara@sumerge.com", birthdate);
+        AuthorDTO authorDTO = new AuthorDTO("Sara", "sara@sumerge.com");
         String email = "sara@sumerge.com";
 
         when(authorRepository.findByEmail(email)).thenReturn(author);
@@ -57,5 +58,16 @@ public class AuthorServiceTest {
         });
 
         verify(authorRepository).findByEmail(email);
+    }
+
+    @Test
+    void getAuthor_invalidEmailFormat_throwsIllegalArgumentException() {
+        String invalidEmail = "invalid-email";
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            authorService.getAuthorByEmail(invalidEmail);
+        });
+
+        assertEquals("Invalid email format.", thrown.getMessage());
     }
 }
