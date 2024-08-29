@@ -41,7 +41,6 @@ public class CourseService {
 
     public List<CourseDTO> showRecommendedCourses() {
         List<Course> courses = courseRecommender.recommendedCourses();
-
         if(courses.isEmpty()) {
             throw new EntityNotFoundException("No courses found");
         }
@@ -50,18 +49,11 @@ public class CourseService {
     }
     }
 
-
     public CourseDTO viewCourse(long id) {
         return courseRepository.findById(id)
                 .map(courseMapper::toCourseDTO)
                 .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
     }
-
-    public Course viewCourseC(long id) {
-        return courseRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Course with id " + id + " not found"));
-    }
-
 
     public CourseDTO addCourse(CourseDTO courseDTO) {
         Course course = courseMapper.toCourse(courseDTO);
@@ -80,9 +72,8 @@ public class CourseService {
         if (!Objects.equals(courseUpdateDTO.getDescription(), "string")) {
             course.setDescription(courseUpdateDTO.getDescription());
         }
-        if (courseUpdateDTO.getCredit() != 1) {
-            course.setCredit(courseUpdateDTO.getCredit());
-        }
+        course.setCredit(courseUpdateDTO.getCredit());
+
 
         Course updatedCourse = courseRepository.save(course);
         return courseMapper.toCourseDTO(updatedCourse);

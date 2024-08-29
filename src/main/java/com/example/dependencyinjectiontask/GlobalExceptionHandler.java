@@ -10,9 +10,7 @@ import org.springframework.web.context.request.WebRequest;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

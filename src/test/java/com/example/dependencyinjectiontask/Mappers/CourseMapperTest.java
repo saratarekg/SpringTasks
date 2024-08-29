@@ -1,6 +1,5 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.Mappers;
 
-import com.example.dependencyinjectiontask.Mappers.CourseMapper;
 import org.example.Course;
 import org.example.CourseDTO;
 import org.junit.jupiter.api.Test;

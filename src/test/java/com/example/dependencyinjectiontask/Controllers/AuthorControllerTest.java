@@ -2,9 +2,7 @@ package com.example.dependencyinjectiontask.Controllers;
 
 import com.example.dependencyinjectiontask.GlobalExceptionHandler;
 import com.example.dependencyinjectiontask.Services.AuthorService;
-import org.example.Author;
 import org.example.AuthorDTO;
-import org.example.Course;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -32,9 +30,10 @@ class AuthorControllerTest {
     @MockBean
     private AuthorService authorService;
 
+    String email= "sara@sumerge.com";
+
     @Test
     void getAuthor_emailExists_returnsAuthor() throws Exception {
-        String email= "sara@sumerge.com";
 
         when(authorService.getAuthorByEmail(email)).thenReturn(any(AuthorDTO.class));
 
@@ -47,7 +46,6 @@ class AuthorControllerTest {
 
     @Test
     void getAuthor_emailNotExists_returnsNotFound() throws Exception {
-        String email= "sara@sumerge.com";
 
         when(authorService.getAuthorByEmail(email)).thenThrow(new EntityNotFoundException("Author with email " + email + " not found."));
 
@@ -59,7 +57,6 @@ class AuthorControllerTest {
 
     @Test
     void getAuthor_catchesException_returnsInternalServerError() throws Exception {
-        String email= "sara@sumerge.com";
 
         when(authorService.getAuthorByEmail(email)).thenThrow(new RuntimeException());
 
