@@ -5,10 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5ef00674-dd4e-40f3-9c3f-b4576806a292" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/course.xsd" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Course.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Course.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/CourseDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/CourseDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -68,6 +68,9 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\sgenina\Downloads\core-spring-labfiles\core-spring-labfiles\lab\AdvancedBeanManagement-NewProj\src\main\java\org\example" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\sgenina\Desktop\AdvancedBeanManagement-NewProj\src\main\resources" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="org.example" />
     </key>
@@ -98,7 +101,10 @@
       <workItem from="1724673971741" duration="596000" />
       <workItem from="1724686115025" duration="4754000" />
       <workItem from="1724766598078" duration="3404000" />
-      <workItem from="1724847172263" duration="5066000" />
+      <workItem from="1724847172263" duration="6418000" />
+      <workItem from="1724922752548" duration="9796000" />
+      <workItem from="1725267811073" duration="7111000" />
+      <workItem from="1725358646667" duration="593000" />
     </task>
     <servers />
   </component>
