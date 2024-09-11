@@ -66,6 +66,5 @@ public ResponseEntity<CourseDTO> updateCourse(
         Pageable pageable = PageRequest.of(page, size);
             Page<Course> courses = courseService.viewAllCoursesPaginated(pageable);
             return ResponseEntity.ok(courses);
-
     }
 }
