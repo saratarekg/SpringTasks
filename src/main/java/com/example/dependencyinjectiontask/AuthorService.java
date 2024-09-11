@@ -1,6 +1,6 @@
 package com.example.dependencyinjectiontask;
 
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

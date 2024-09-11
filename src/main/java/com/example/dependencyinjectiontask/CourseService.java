@@ -1,6 +1,6 @@
 package com.example.dependencyinjectiontask;
 
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import org.example.CourseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -89,7 +89,7 @@ public class CourseService {
 
 
     public Course updateCourse(Course course) {
-        if (!courseRepository.existsById(course.getId())) {
+        if (!courseRepository.existsById((int) course.getId())) {
             throw new EntityNotFoundException("Course not found with ID: " + course.getId());
         }
         Course updatedCourse = courseRepository.save(course);

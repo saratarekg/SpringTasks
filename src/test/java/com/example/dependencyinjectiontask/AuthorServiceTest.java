@@ -1,6 +1,6 @@
 package com.example.dependencyinjectiontask;
 
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import org.example.Author;
 
 import org.junit.jupiter.api.Test;
@@ -8,6 +8,8 @@ import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
@@ -24,7 +26,8 @@ class AuthorServiceTest {
 
     @Test
     void getAuthor_AuthorExists_returnAuthor() {
-        Author author = new Author("sara","sara@sumerge.com");
+        Date birthdate = new Date(23/6/2002);
+        Author author = new Author("sara","sara@sumerge.com",birthdate);
         String email= "sara@sumerge.com";
 
         when(authorRepository.findByEmail(email)).thenReturn(author);

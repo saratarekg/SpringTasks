@@ -2,16 +2,12 @@ package com.example.dependencyinjectiontask;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import jakarta.persistence.EntityNotFoundException;
+import javax.persistence.*;
 import org.example.Course;
 import org.example.CourseDTO;
-import org.example.CourseRecommender;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -19,14 +15,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -50,7 +44,7 @@ public class CourseServiceTest {
     @Test
     void viewCourse_courseExists_returnCourseDTO() {
         Course course = new Course("Java", "Java Description", 1);
-        CourseDTO courseDTO = new CourseDTO("Java", "Java Description");
+        CourseDTO courseDTO = new CourseDTO("Java", "Java Description",2);
 
         when(courseRepository.findById(502)).thenReturn(Optional.of(course));
         when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
@@ -76,7 +70,7 @@ public class CourseServiceTest {
     @Test
     void addCourse_courseNotNull_returnCourseDTO() {
         Course course = new Course("Java", "Java Description", 4);
-        CourseDTO courseDTO = new CourseDTO("Java", "Java Description");
+        CourseDTO courseDTO = new CourseDTO("Java", "Java Description",4);
 
         when(courseRepository.save(course)).thenReturn(course);
         when(courseMapper.toCourseDTO(course)).thenReturn(courseDTO);
@@ -188,7 +182,7 @@ public class CourseServiceTest {
 
 
         List<CourseDTO> courseDTOs = first5Courses.stream()
-                .map(course -> new CourseDTO(course.getTitle(), course.getDescription()))
+                .map(course -> new CourseDTO(course.getTitle(), course.getDescription(), course.getCredit()))
                 .collect(Collectors.toList());
 
 

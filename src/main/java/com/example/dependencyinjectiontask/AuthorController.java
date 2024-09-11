@@ -1,6 +1,6 @@
 package com.example.dependencyinjectiontask;
+import javax.persistence.*;
 
-import jakarta.persistence.EntityNotFoundException;
 import org.example.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
