@@ -89,10 +89,8 @@ public class CourseService {
     }
 
 
-
-
     public Course updateCourse(Course course) {
-        if (!courseRepository.existsById(course.getId())) {
+        if (!courseRepository.existsById((int) course.getId())) {
             throw new EntityNotFoundException("Course not found with ID: " + course.getId());
         }
         Course updatedCourse = courseRepository.save(course);
