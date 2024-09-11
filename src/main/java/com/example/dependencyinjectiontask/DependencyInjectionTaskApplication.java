@@ -20,12 +20,12 @@ public class DependencyInjectionTaskApplication {
 
         courseService.testConnection();
 
-        Course newCourse = new Course("","",0,0);
+        Course newCourse = new Course("","",0);
 
         newCourse.setTitle("Spring Framework");
         newCourse.setDescription("Learn the basics of Spring");
         newCourse.setCredit(4);
-        newCourse.setAuthorId(1);
+//        newCourse.setAuthorId(1);
         courseService.addCourse(newCourse);
 
 

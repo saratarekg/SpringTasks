@@ -56,7 +56,7 @@ public class CourseService {
     public void addCourse(Course course) {
         String sql = "INSERT INTO Course (name, description, credit, author_id) VALUES (?, ?, ?, ?)";
         try {
-            int rowsAffected = jdbcTemplate.update(sql, course.getTitle(), course.getDescription(), course.getCredit(), course.getAuthorId());
+            int rowsAffected = jdbcTemplate.update(sql, course.getTitle(), course.getDescription(), course.getCredit());
             System.out.println("Course added successfully. Number of rows affected: " + rowsAffected);
         } catch (DataAccessException e) {
             // Log or handle the exception
@@ -65,10 +65,10 @@ public class CourseService {
     }
 
     public void updateCourse(Course course) {
-        String sql = "UPDATE Course SET name = ?, description = ?, credit = ?, author_id = ? WHERE id = ?";
+        String sql = "UPDATE Course SET name = ?, description = ?, credit = ? WHERE id = ?";
 
         try {
-            jdbcTemplate.update(sql, course.getTitle(), course.getDescription(), course.getCredit(), course.getAuthorId(), course.getId());
+            jdbcTemplate.update(sql, course.getTitle(), course.getDescription(), course.getCredit(), course.getId());
         } catch (EmptyResultDataAccessException e) {
             // Handle the case where no course is found
             System.out.println("Course with ID " + course.getId() + " not found.");
@@ -115,12 +115,11 @@ public class CourseService {
     private static class CourseRowMapper implements RowMapper<Course> {
         @Override
         public Course mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Course course = new Course("","",0,0);
+            Course course = new Course("","",0);
             course.setId(rs.getInt("id"));
             course.setTitle(rs.getString("name"));
             course.setDescription(rs.getString("description"));
             course.setCredit(rs.getInt("credit"));
-            course.setAuthorId(rs.getInt("author_id"));
             return course;
         }
     }

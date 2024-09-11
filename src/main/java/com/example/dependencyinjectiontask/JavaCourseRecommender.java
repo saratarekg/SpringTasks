@@ -15,9 +15,9 @@ public class JavaCourseRecommender implements CourseRecommender {
     @Override
         public List<Course> recommendedCourses() {
             return Arrays.asList(
-                    new Course("Java 101", "Introduction to Java programming",4,2),
-                    new Course("Advanced Java", "Deep dive into Java features",4,2),
-                    new Course("Spring Framework", "Building applications with Spring",4,2)
+                    new Course("Java 101", "Introduction to Java programming",2),
+                    new Course("Advanced Java", "Deep dive into Java features",2),
+                    new Course("Spring Framework", "Building applications with Spring",2)
             );
         }
 
