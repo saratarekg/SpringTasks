@@ -1,4 +1,4 @@
-package com.example.dependencyinjectiontask;
+package com.example.dependencyinjectiontask.IntegrationTests;
 
 
 import com.example.dependencyinjectiontask.Mappers.CourseMapper;
